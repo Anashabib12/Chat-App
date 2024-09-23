@@ -1,15 +1,20 @@
 // ignore_for_file: avoid_print, sized_box_for_whitespace
 
+import 'dart:io';
+
+import 'package:chat_app/api/api.dart';
 import 'package:chat_app/components/clipper.dart';
 import 'package:chat_app/components/customButton.dart';
 import 'package:chat_app/components/customLogo.dart';
 import 'package:chat_app/components/customTextfield.dart';
+import 'package:chat_app/views/chatlist_screen.dart';
 import 'package:chat_app/views/forgotPass_screen.dart';
 import 'package:chat_app/views/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -50,14 +55,14 @@ class _LoginScreenState extends State<LoginScreen> {
       Get.snackbar(
         'Error!',
         e.toString(),
-        backgroundColor: const Color(0xffEC2578), // Background color
-        colorText: Colors.white, // Text color
-        snackPosition: SnackPosition.BOTTOM, // Position
+        backgroundColor: Colors.white.withOpacity(0.9), // Background color
+        colorText: Colors.black, // Text color
+        snackPosition: SnackPosition.TOP, // Position
         borderRadius: 8, // Border radius
         margin: const EdgeInsets.all(16), // Margin
         padding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Padding
-        duration: const Duration(seconds: 3), // Duration
+        duration: const Duration(seconds: 8), // Duration
         borderColor: Colors.black.withOpacity(0.25), // Border color
         borderWidth: 1, // Border width
       );
@@ -65,6 +70,67 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  _handleGoogleBtnClick() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await _signInWithGoogle().then((user) async {
+      if (user != null) {
+        print("\nUser: ${user.user}");
+        print('\nUser: ${user.additionalUserInfo}');
+        if ((await APIs.isUserExist())) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ChatlistScreen()));
+        } else {
+          await APIs.createUser().then((value) => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ChatlistScreen())));
+        }
+      }
+    });
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print('\n_signInWithGoogle: $e');
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+        backgroundColor: Colors.white.withOpacity(0.9), // Background color
+        colorText: Colors.black, // Text color
+        snackPosition: SnackPosition.TOP, // Position
+        borderRadius: 8, // Border radius
+        margin: const EdgeInsets.all(16), // Margin
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Padding
+        duration: const Duration(seconds: 8), // Duration
+        borderColor: Colors.black.withOpacity(0.25), // Border color
+        borderWidth: 1, // Border width
+      );
+    }
+    return null;
   }
 
   @override
@@ -100,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       top: height * 0.33,
                       left: width * 0.12,
                       child: Container(
-                        height: height * 0.51,
+                        height: height * 0.52,
                         width: width * 0.76,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -135,8 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 Customtextfield(
                                   controller: email,
-                                  constraints: BoxConstraints(
-                                      maxWidth: width, maxHeight: height),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter an email';
@@ -157,11 +221,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       size: width * 0.043,
                                     ),
                                   ),
+                                  Width: width * 0.66,
+                                  contentPadding: EdgeInsets.all(13),
                                 ),
                                 SizedBox(
                                   height: height * 0.025,
                                 ),
                                 Customtextfield(
+                                  Width: width * 0.66,
                                   controller: password,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -174,8 +241,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   filled: true,
                                   color: const Color(0xffEDEDED),
-                                  constraints: BoxConstraints(
-                                      maxWidth: width, maxHeight: height),
                                   text: 'Password',
                                   suffixIcon: Padding(
                                     padding: const EdgeInsets.all(15),
@@ -191,6 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       size: width * 0.043,
                                     ),
                                   ),
+                                  contentPadding: EdgeInsets.all(13),
                                 ),
                                 SizedBox(
                                   height: height * 0.011,
@@ -248,15 +314,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Transform.translate(
-                                      offset: const Offset(15, 0),
-                                      child: Image.asset(
-                                        'assets/logo/google.png',
-                                        height: height * 0.05,
-                                        width: width * 0.15,
+                                      offset: const Offset(7, 0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          _handleGoogleBtnClick();
+                                        },
+                                        child: Image.asset(
+                                          'assets/logo/google.png',
+                                          height: height * 0.05,
+                                          width: width * 0.15,
+                                        ),
                                       ),
                                     ),
                                     Transform.translate(
-                                      offset: const Offset(-8, 0),
+                                      offset: const Offset(-6, 0),
                                       child: Image.asset(
                                         'assets/logo/fb.png',
                                         height: height * 0.035,

@@ -9,51 +9,55 @@ class OnboardingScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color(0xffFFFFFF),
-      body: LayoutBuilder(builder: (context, constraints) {
-        final double width = constraints.maxWidth;
-        final double height = constraints.maxHeight;
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height * 0.084,
-              ),
-              Image.asset('assets/images/f3.png'),
-              SizedBox(
-                height: height * 0.1,
-              ),
-              Ontext1(
-                text: "Foodie is Where Your\nComfort Food Resides",
-                constraints: constraints,
-              ),
-              SizedBox(
-                height: height * 0.018,
-              ),
-              Ontext2(
-                text: 'Enjoy a fast and smooth food delivery at\nyour doorstep',
-                constraints: constraints,
-              ),
-              SizedBox(
-                height: height * 0.06,
-              ),
-              Custombutton(
-                width: width * 0.35,
-                height: height * 0.055,
-                constraints: constraints,
-                text: 'Next',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Wrapper()));
-                },
-              )
-            ],
-          ),
-        );
-      }),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.084,
+            ),
+            Image.asset('assets/images/f3.png'),
+            SizedBox(
+              height: height * 0.1,
+            ),
+            Ontext1(
+              text: "Foodie is Where Your\nComfort Food Resides",
+              constraints:
+                  BoxConstraints(maxWidth: width), // Adjust accordingly
+            ),
+            SizedBox(
+              height: height * 0.018,
+            ),
+            Ontext2(
+              text: 'Enjoy a fast and smooth food delivery at\nyour doorstep',
+              constraints:
+                  BoxConstraints(maxWidth: width), // Adjust accordingly
+            ),
+            SizedBox(
+              height: height * 0.06,
+            ),
+            Custombutton(
+              width: width * 0.35,
+              height: height * 0.055,
+              constraints:
+                  BoxConstraints(maxWidth: width), // Adjust accordingly
+              text: 'Next',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Wrapper(),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

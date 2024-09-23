@@ -1,0 +1,8 @@
+<resources>
+    <!-- Add your application strings here -->
+    <string name="app_name">chat_app</string>
+    
+    <!-- Add the required string resources -->
+    <string name="admob_app_id">YOUR_ADMOB_APP_ID_HERE</string> <!-- Replace with your actual AdMob App ID -->
+    <string name="firebase_app_id">YOUR_FIREBASE_APP_ID_HERE</string> <!-- Replace with your actual Firebase App ID -->
+</resources>

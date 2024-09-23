@@ -123,8 +123,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                           Customtextfield(
                             controller: email,
-                            constraints: BoxConstraints(
-                                maxWidth: width, maxHeight: height),
+                           
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your email';
@@ -143,7 +142,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 FontAwesomeIcons.userLarge,
                                 size: width * 0.043,
                               ),
-                            ),
+                            ), Width: width*0.66, contentPadding: EdgeInsets.all(13),
                           ),
                           SizedBox(
                             height: height * 0.04,

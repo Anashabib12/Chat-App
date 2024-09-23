@@ -2,6 +2,7 @@ import 'package:chat_app/components/clipper.dart';
 import 'package:chat_app/components/customButton.dart';
 import 'package:chat_app/components/customLogo.dart';
 import 'package:chat_app/components/customTextfield.dart';
+import 'package:chat_app/views/login_screen.dart';
 import 'package:chat_app/views/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -118,8 +119,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           height: height * 0.03,
                         ),
                         Customtextfield(
-                          constraints: BoxConstraints(
-                              maxWidth: width, maxHeight: height),
                           filled: true,
                           color: const Color(0xffEDEDED),
                           text: 'Name',
@@ -131,6 +130,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               size: width * 0.043,
                             ),
                           ),
+                          Width: width * 0.66,
+                          contentPadding: EdgeInsets.all(13),
                         ),
                         SizedBox(
                           height: height * 0.025,
@@ -149,8 +150,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           filled: true,
                           color: const Color(0xffEDEDED),
-                          constraints: BoxConstraints(
-                              maxWidth: width, maxHeight: height),
                           text: 'Email',
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(15),
@@ -159,6 +158,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               size: width * 0.043,
                             ),
                           ),
+                          Width: width * 0.66,
+                          contentPadding: EdgeInsets.all(13),
                         ),
                         SizedBox(
                           height: height * 0.025,
@@ -176,8 +177,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           filled: true,
                           color: const Color(0xffEDEDED),
-                          constraints: BoxConstraints(
-                              maxWidth: width, maxHeight: height),
                           text: 'Password',
                           suffixIcon: Padding(
                             padding: const EdgeInsets.all(15),
@@ -193,6 +192,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               size: width * 0.043,
                             ),
                           ),
+                          Width: width * 0.66,
+                          contentPadding: EdgeInsets.all(13),
                         ),
                         SizedBox(
                           height: height * 0.011,
@@ -231,12 +232,20 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         height: height * 0.007,
                       ),
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                            color: const Color(0xffEC2578),
-                            fontWeight: FontWeight.w600,
-                            fontSize: width * 0.05),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()));
+                        },
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                              color: const Color(0xffEC2578),
+                              fontWeight: FontWeight.w600,
+                              fontSize: width * 0.05),
+                        ),
                       ),
                     ],
                   ))

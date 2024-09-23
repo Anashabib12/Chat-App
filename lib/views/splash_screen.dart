@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:chat_app/views/onBoarding_screen1.dart';
+import 'package:chat_app/views/intro_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,9 +13,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const OnboardingScreen1()));
+          MaterialPageRoute(builder: (context) => const IntroScreen()));
     });
   }
 
